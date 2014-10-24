@@ -22,5 +22,8 @@
   "bugs": {
     "url": "https://github.com/sullenor/csscomb-linter/issues"
   },
-  "homepage": "https://github.com/sullenor/csscomb-linter"
+  "homepage": "https://github.com/sullenor/csscomb-linter",
+  "dependencies": {
+    "csscomb": "^3.0.3"
+  }
 }
