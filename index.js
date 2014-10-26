@@ -1,4 +1,3 @@
 'use strict';
 
-exports.csscombLinter = require('./lib/csslinter');
-exports.reporter = require('./lib/reporter');
+module.exports = require('./lib/csscomb-linter');
