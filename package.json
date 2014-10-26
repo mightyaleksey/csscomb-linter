@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/sullenor/csscomb-linter",
   "dependencies": {
+    "commander": "^2.5.0",
     "csscomb": "^3.0.3"
   }
 }
