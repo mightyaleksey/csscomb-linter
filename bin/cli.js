@@ -2,11 +2,19 @@
 'use strict';
 
 var csscombLinter = require('../lib/csscomb-linter')();
+var program = require('commander');
+var pkg = require('../package');
 var reporter = require('../lib/reporter')();
 
-process.stdin.isTTY ?
-    processArgs() :
+program
+    .version(pkg.version)
+    .parse(process.argv);
+
+if (program.args.length) {
+    lintFiles(program.args);
+} else {
     lintBuffer();
+}
 
 process.on('exit', function () {
     process.exit(reporter.hasErrors() ? 2 : 0);
@@ -16,21 +24,6 @@ function lintBuffer() {
     process.stdin
         .pipe(csscombLinter())
         .pipe(reporter, {end: false});
-}
-
-function processArgs() {
-    var program = require('commander');
-    var pkg = require('../package');
-
-    program
-        .version(pkg.version)
-        .parse(process.argv);
-
-    if (program.args.length === 0) {
-        program.help();
-    }
-
-    lintFiles(program.args);
 }
 
 /**
