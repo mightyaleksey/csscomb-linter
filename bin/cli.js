@@ -40,6 +40,9 @@ function lintFiles(files) {
     var fs = require('fs');
     var path = require('path');
 
+    // cheap solution
+    reporter.setMaxListeners(files.length);
+
     files.forEach(function (file) {
         var filePath = path.resolve(file);
 
