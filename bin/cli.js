@@ -2,15 +2,20 @@
 'use strict';
 
 var csscombLinter = require('../lib/csscomb-linter')();
+var reporter = require('../lib/reporter')();
 
 process.stdin.isTTY ?
     processArgs() :
     lintBuffer();
 
+process.on('exit', function () {
+    process.exit(reporter.hasErrors() ? 2 : 0);
+});
+
 function lintBuffer() {
     process.stdin
         .pipe(csscombLinter())
-        .pipe(process.stderr);
+        .pipe(reporter, {end: false});
 }
 
 function processArgs() {
@@ -42,12 +47,12 @@ function lintFiles(files) {
             if (err) {
                 console.error(err.code === 'ENOENT' ?
                     filePath + ' not found!' : err);
-                process.exit(2);
+                process.exit(1);
             }
 
             if (!stat.isFile()) {
                 console.error(filePath + ' not a file!');
-                process.exit(2);
+                process.exit(1);
             }
 
             lintFile(filePath);
@@ -69,5 +74,5 @@ function lintFile(filePath) {
 
     fs.createReadStream(filePath)
         .pipe(csscombLinter(options))
-        .pipe(process.stderr);
+        .pipe(reporter, {end: false});
 }
