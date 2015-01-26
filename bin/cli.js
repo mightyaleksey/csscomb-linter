@@ -65,6 +65,7 @@ function lintFile(filePath) {
 
     var options = {
         filename: path.basename(filePath),
+        filePath: filePath,
         syntax: path.extname(filePath).replace('.', '')
     };
 
