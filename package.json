@@ -1,6 +1,6 @@
 {
   "name": "csscomb-linter",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Linter for CSS based on the csscomb",
   "main": "index.js",
   "bin": "./bin/cli.js",
@@ -27,6 +27,7 @@
   "homepage": "https://github.com/sullenor/csscomb-linter",
   "dependencies": {
     "commander": "^2.5.0",
-    "csscomb": "^3.0.3"
+    "csscomb": "^3.0.3",
+    "glob": "^7.1.1"
   }
 }

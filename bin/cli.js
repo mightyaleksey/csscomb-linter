@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 'use strict';
 
-var csscombLinter = require('../lib/csscomb-linter')();
-var program = require('commander');
-var pkg = require('../package');
-var reporter = require('../lib/reporter')();
+const csscombLinter = require('../lib/csscomb-linter')();
+const glob = require('glob');
+const program = require('commander');
+const pkg = require('../package');
+const reporter = require('../lib/reporter')();
 
 program
     .version(pkg.version)
@@ -30,40 +31,30 @@ function lintBuffer() {
  * @param  {string[]} files
  */
 function lintFiles(files) {
-    var fs = require('fs');
-    var path = require('path');
+    const fs = require('fs');
+    const path = require('path');
 
     // cheap solution
-    reporter.setMaxListeners(files.length);
+    reporter.setMaxListeners(Infinity);
 
-    files.forEach(function (file) {
-        var filePath = path.resolve(file);
+    files.map(pattern => glob(pattern, {absolute: true}, function (er, resolvedFiles) {
+      if (er) {
+        console.error(er);
+        return void process.exit(1);
+      }
 
-        fs.stat(filePath, function (err, stat) {
-            if (err) {
-                console.error(err.code === 'ENOENT' ?
-                    filePath + ' not found!' : err);
-                process.exit(1);
-            }
-
-            if (!stat.isFile()) {
-                console.error(filePath + ' not a file!');
-                process.exit(1);
-            }
-
-            lintFile(filePath);
-        });
-    });
+      resolvedFiles.forEach(lintFile);
+    }));
 }
 
 /**
  * @param {String} filePath Absolute path.
  */
 function lintFile(filePath) {
-    var fs = require('fs');
-    var path = require('path');
+    const fs = require('fs');
+    const path = require('path');
 
-    var options = {
+    const options = {
         filename: path.basename(filePath),
         filePath: filePath,
         syntax: path.extname(filePath).replace('.', '')
